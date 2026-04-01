@@ -11,7 +11,7 @@ resource "random_password" "master" {
 
 resource "aws_secretsmanager_secret" "db" {
   name                    = "${var.name}/master"
-  kms_key_id              = var.kms_key_id
+  kms_key_id              = var.secrets_kms_key_id
   recovery_window_in_days = 7
   tags                    = var.tags
 }
@@ -42,7 +42,7 @@ resource "aws_db_instance" "this" {
   storage_type          = "gp3"
 
   storage_encrypted = true
-  kms_key_id        = var.kms_key_id
+  kms_key_id        = var.storage_kms_key_id
 
   multi_az            = var.multi_az
   publicly_accessible = false
@@ -54,17 +54,17 @@ resource "aws_db_instance" "this" {
   backup_window           = var.backup_window
   maintenance_window      = var.maintenance_window
 
-  deletion_protection = var.deletion_protection
-  skip_final_snapshot = false
-  final_snapshot_identifier = "${var.name}-final-${replace(timestamp(), "[: TZ-]", "")}"
+  deletion_protection       = var.deletion_protection
+  skip_final_snapshot       = false
+  final_snapshot_identifier = "${var.name}-final-${formatdate("20060102150405", timestamp())}"
 
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   performance_insights_enabled    = true
-  performance_insights_kms_key_id = var.kms_key_id
+  performance_insights_kms_key_id = var.pi_kms_key_id
 
   auto_minor_version_upgrade = true
-  apply_immediately           = false
+  apply_immediately          = true
 
   tags = var.tags
 }

@@ -11,11 +11,17 @@ variable "instance_class" { type = string }
 
 variable "allocated_storage" { type = number }
 variable "max_allocated_storage" { type = number }
-variable "storage_type" { type = string }
+variable "storage_type" { 
+  type = string
+  default = "gp3"
+}
 
 variable "multi_az" { type = bool }
 
-variable "parameter_group_family" { type = string }
+variable "parameter_group_family" {
+  type    = string
+  default = "postgres16"
+}
 
 variable "parameters" {
   type = list(object({
@@ -31,24 +37,56 @@ variable "backup_window" { type = string }
 variable "maintenance_window" { type = string }
 
 variable "deletion_protection" { type = bool }
-variable "apply_immediately" { type = bool }
+variable "apply_immediately" { 
+  type = bool
+  default = true
+}
 
 variable "cloudwatch_logs_exports" {
   type    = list(string)
   default = ["postgresql", "upgrade"]
 }
 
-variable "performance_insights_enabled" { type = bool }
-variable "pi_kms_key_id" { type = string }
-variable "pi_retention_days" { type = number }
 
-variable "enhanced_monitoring_interval" { type = number }
-variable "enhanced_monitoring_role_arn" { type = string, default = null }
+variable "performance_insights_enabled" {
+  type    = bool
+  default = true
+}
 
-variable "auto_minor_version_upgrade" { type = bool }
+variable "pi_retention_days" {
+  type    = number
+  default = 7
+}
 
-variable "storage_kms_key_id" { type = string }
-variable "secrets_kms_key_id" { type = string }
+variable "enhanced_monitoring_interval" {
+  type    = number
+  default = 0
+}
+
+variable "enhanced_monitoring_role_arn" {
+  type    = string
+  default = null
+}
+
+variable "auto_minor_version_upgrade" {
+  type    = bool
+  default = true
+}
+
+variable "storage_kms_key_id" {
+  type    = string
+  default = null
+}
+
+variable "secrets_kms_key_id" {
+  type    = string
+  default = null
+}
+
+variable "pi_kms_key_id" {
+  type    = string
+  default = null
+}
 
 variable "tags" {
   type    = map(string)
