@@ -1,0 +1,56 @@
+variable "name" { type = string }
+
+variable "subnet_ids" { type = list(string) }
+variable "security_group_ids" { type = list(string) }
+
+variable "db_name" { type = string }
+variable "master_username" { type = string }
+variable "engine_version" { type = string }
+
+variable "instance_class" { type = string }
+
+variable "allocated_storage" { type = number }
+variable "max_allocated_storage" { type = number }
+variable "storage_type" { type = string }
+
+variable "multi_az" { type = bool }
+
+variable "parameter_group_family" { type = string }
+
+variable "parameters" {
+  type = list(object({
+    name         = string
+    value        = string
+    apply_method = optional(string)
+  }))
+  default = []
+}
+
+variable "backup_retention_days" { type = number }
+variable "backup_window" { type = string }
+variable "maintenance_window" { type = string }
+
+variable "deletion_protection" { type = bool }
+variable "apply_immediately" { type = bool }
+
+variable "cloudwatch_logs_exports" {
+  type    = list(string)
+  default = ["postgresql", "upgrade"]
+}
+
+variable "performance_insights_enabled" { type = bool }
+variable "pi_kms_key_id" { type = string }
+variable "pi_retention_days" { type = number }
+
+variable "enhanced_monitoring_interval" { type = number }
+variable "enhanced_monitoring_role_arn" { type = string, default = null }
+
+variable "auto_minor_version_upgrade" { type = bool }
+
+variable "storage_kms_key_id" { type = string }
+variable "secrets_kms_key_id" { type = string }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}
